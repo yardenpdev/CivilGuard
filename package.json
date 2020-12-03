@@ -1,0 +1,14 @@
+{
+  "name": "CivilGuard",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "http": "^0.0.1-security",
+    "odata-parser": "^1.4.1",
+    "pg": "^8.5.1",
+    "swagger-tools": "^0.10.4",
+    "weather-js": "^2.0.0"
+  }
+}

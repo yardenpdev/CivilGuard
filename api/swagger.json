@@ -1,0 +1,224 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "MIshmarHevratyAPI",
+      "description": "API For Mishmar.",
+      "version": "1.0"
+    },
+    "produces": ["application/json"],
+    "host": "localhost:3000",
+    "basePath": "/api",
+    "paths": {
+        "/new_user": {
+            "post": {
+                "x-swagger-router-controller": "User",
+                "operationId": "addUser",
+                "description": "Register a new user to the notification system",
+                "parameters": [
+                {
+                    "name": "user_name",
+                    "in": "formData",
+                    "description": "the user name",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "name": "id",
+                    "in": "formData",
+                    "description": "the user ID",
+                    "required": true,
+                    "type": "string"
+                }
+                ],
+                "responses": {
+                "default": {
+                    "description": "Invalid request.",
+                    "schema": {
+                    "$ref": "#/definitions/Error"
+                    }
+                },
+                "200": {
+                    "description": "user registered successfuly.",
+                    "schema": {
+                    "$ref": "#/definitions/Success"
+                    }
+                }
+                }
+            }
+        },
+        "/subjects": {
+            "post": {
+                "x-swagger-router-controller": "User",
+                "operationId": "setSubjects",
+                "description": "set subjects to a user",
+                "parameters": [
+                {
+                    "name": "user_id",
+                    "in": "formData",
+                    "description": "user ID",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "name": "subjects",
+                    "in": "formData",
+                    "description": "subjects to register to the user",
+                    "required": true,
+                    "type": "array",
+                    "items":{
+                        "type": "string"
+                    }
+                }
+                ],
+                "responses": {
+                "default": {
+                    "description": "Invalid request.",
+                    "schema": {
+                    "$ref": "#/definitions/Error"
+                    }
+                },
+                "200": {
+                    "description": "subjects added to user successfuly.",
+                    "schema": {
+                    "$ref": "#/definitions/Success"
+                    }
+                }
+                }
+            },
+            "get": {
+                "x-swagger-router-controller": "User",
+                "operationId": "getSubjects",
+                "description": "get subjects user is registred",
+                "parameters": [
+                {
+                    "name": "user_id",
+                    "in": "query",
+                    "description": "user ID",
+                    "required": true,
+                    "type": "string"
+                }
+                ],
+                "responses": {
+                "default": {
+                    "description": "Invalid request.",
+                    "schema": {
+                    "$ref": "#/definitions/Error"
+                    }
+                },
+                "200": {
+                    "description": "subjects the user is registred to.",
+                    "schema": {
+                    "$ref": "#/definitions/Subjects"
+                    }
+                }
+                }
+            }
+        },
+        "/remark": {
+            "post": {
+                "x-swagger-router-controller": "UserActions",
+                "operationId": "addRemark",
+                "description": "add a user remark to the commitee",
+                "parameters": [
+                {
+                    "name": "committee_id",
+                    "in": "formData",
+                    "description": "commitee ID",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "name": "remark",
+                    "in": "formData",
+                    "description": "user remark on the commitee",
+                    "required": true,
+                    "type": "string"
+                }
+                ],
+                
+                "responses": {
+                "default": {
+                    "description": "Invalid request.",
+                    "schema": {
+                    "$ref": "#/definitions/Error"
+                    }
+                },
+                "200": {
+                    "description": "remark loged successfuly.",
+                    "schema": {
+                    "$ref": "#/definitions/Success"
+                    }
+                }
+                }
+            },
+            "get": {
+                "x-swagger-router-controller": "UserActions",
+                "operationId": "getRemarks",
+                "description": "get session remarks",
+                "parameters": [
+                {
+                    "name": "committee_id",
+                    "in": "query",
+                    "description": "commitee ID",
+                    "required": true,
+                    "type": "string"
+                }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "Invalid request.",
+                        "schema": {
+                        "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "200": {
+                        "description": "remarks array of the commitee session.",
+                        "schema": {
+                        "$ref": "#/definitions/Remarks"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+      "Subjects": {
+        "properties": {
+            "subjects": {
+                "type": "array",
+                "items":{
+                    "type": "string"
+                }
+            }
+          },
+          "required": ["subjects"]
+      },
+      "Remarks": {
+        "properties": {
+            "remarks": {
+                "type": "array",
+                "items":{
+                    "type": "string"
+                }
+            }
+          },
+          "required": ["remarks"]
+      },
+      "Error": {
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": ["message"]
+      },
+      "Success": {
+        "properties": {
+            "success": {
+              "type": "string"
+            }
+          },
+          "required": ["success"]
+      }
+    }
+}
