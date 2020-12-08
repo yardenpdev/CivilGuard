@@ -179,7 +179,105 @@
                     }
                 }
             }
-        }
+        },
+        "/sessions_of_subjects": {
+            "get": {
+                "x-swagger-router-controller": "SessionSubject",
+                "operationId": "getSessions",
+                "description": "get sessions of subject",
+                "parameters": [
+                {
+                    "name": "subjects",
+                    "in": "query",
+                    "description": "retrive the sessions connected to the subjects",
+                    "required": true,
+                    "type": "array",
+                    "items":{
+                        "type": "string"
+                    }
+                }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "Invalid request.",
+                        "schema": {
+                        "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "200": {
+                        "description": "sessions list.",
+                        "schema": {
+                        "$ref": "#/definitions/Sessions"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "x-swagger-router-controller": "SessionSubject",
+                "operationId": "addSessionSubject",
+                "description": "add session and subject connection",
+                "parameters": [
+                {
+                    "name": "subject",
+                    "in": "formData",
+                    "description": "subject",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "name": "session_id",
+                    "in": "formData",
+                    "description": "id of the session",
+                    "required": true,
+                    "type": "string"
+                }
+                ],
+                
+                "responses": {
+                "default": {
+                    "description": "Invalid request.",
+                    "schema": {
+                    "$ref": "#/definitions/Error"
+                    }
+                },
+                "200": {
+                    "description": "remark loged successfuly.",
+                    "schema": {
+                    "$ref": "#/definitions/Success"
+                    }
+                }
+                }
+            }
+        },
+        "/subjects_of_sessions": {
+            "get": {
+                "x-swagger-router-controller": "SessionSubject",
+                "operationId": "getSubjects",
+                "description": "get subjects of session",
+                "parameters": [
+                {
+                    "name": "session_id",
+                    "in": "query",
+                    "description": "retrive the subjects connected to the session",
+                    "required": true,
+                    "type": "string",
+                }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "Invalid request.",
+                        "schema": {
+                        "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "200": {
+                        "description": "sessions list.",
+                        "schema": {
+                        "$ref": "#/definitions/Subjects"
+                        }
+                    }
+                }
+            },
     },
     "definitions": {
       "Subjects": {
@@ -192,6 +290,17 @@
             }
           },
           "required": ["subjects"]
+      },
+      "Sessions": {
+        "properties": {
+            "sessions": {
+                "type": "array",
+                "items":{
+                    "type": "string"
+                }
+            }
+          },
+          "required": ["sessions"]
       },
       "Remarks": {
         "properties": {
