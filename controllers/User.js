@@ -4,7 +4,7 @@
 // const ks_module = require('../services/KnesetService.js');
 // const ks = new ks_module();
 
-import DAO from '../db/dao.js';
+const DAO = require('../db/dao.js')
 const dao = new DAO();
 
 

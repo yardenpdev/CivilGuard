@@ -1,27 +1,29 @@
 const { Client } = require('pg')
 const client = new Client({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'knesetAPIDB',
-    password: 'zxcv0ZXC',
-    // port: 3211,
+    user: process.env.PG_USER || 'postgres',
+    host: process.env.PG_HOST || 'localhost',
+    database: process.env.PG_DB || 'mishmar',
+    password: process.env.PG_PASSWORD || 'zxcv0ZXC',
+    port: process.env.PG_PORT || 3211,
   })
 client.connect()
 
-client
-.query(
-    "CREATE TABLE remarks (user_id  varchar(80), text text, time_inserted date, session_id varchar(8));"
-)
-.catch(e => console.error(e.stack))
+async function createDB() {
+    try {
+        await client.query(
+            "CREATE TABLE remarks (user_id  varchar(80), text text, time_inserted date, session_id varchar(8));"
+        )
 
-client
-.query(
-    "CREATE TABLE users (user_id  varchar(80) PRIMARY KEY, name varchar(80), date_created date, subjects varchar(32)[], last_updated date);"
-)
-.catch(e => console.error(e.stack))
+        await client.query(
+            "CREATE TABLE users (user_id  varchar(80) PRIMARY KEY, name varchar(80), date_created date, subjects varchar(32)[], last_updated date);"
+        )
 
-client
-.query(
-    "CREATE TABLE session_subject (session  varchar(80), subject varchar(80));"
-)
-.catch(e => console.error(e.stack))
+        await client.query(
+            "CREATE TABLE session_subject (session  varchar(80), subject varchar(80));"
+        )
+    } catch (e) {
+        console.error(e)
+    }
+}
+
+createDB()

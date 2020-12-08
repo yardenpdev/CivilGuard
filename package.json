@@ -11,6 +11,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "http": "^0.0.1-security",
+    "node-fetch": "^2.6.1",
     "odata-parser": "^1.4.1",
     "pg": "^8.5.1",
     "swagger-tools": "^0.10.4",

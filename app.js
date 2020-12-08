@@ -4,9 +4,22 @@ const express = require('express');
 const app = express()
 const http = require('http');
 const swaggerTools = require('swagger-tools');
+const fetch = require('node-fetch');
 
 var serverPort = 3000;
-app.use(express.static('./front'))
+app.use(express.static('./public'))
+
+app.get('/knesset/:query*', async (req, res, next) => {
+  const {query} = req.params
+  try {
+    const url = `http://knesset.gov.il/Odata/ParliamentInfo.svc/${query}?${Object.keys(req.query).map(k => `${k}=${encodeURIComponent(req.query[k])}`)}`
+    const response = await fetch(url, 
+      {headers: {'Accept': 'application/json', 'Content-Type': 'application/json'}})
+    res.send(await response.text())
+  } catch (e) {
+    res.status(500).send(e.message)
+  }
+})
 
 // swaggerRouter configuration
 const options = {

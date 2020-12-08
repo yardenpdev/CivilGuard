@@ -1,10 +1,10 @@
 const { Client } = require('pg')
 const client = new Client({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'knesetAPIDB',
-    password: process.env.POSTGRESSPASS,
-    // port: 3211,
+    user: process.env.PG_USER || 'postgres',
+    host: process.env.PG_HOST || 'localhost',
+    database: process.env.PG_DB || 'mishmar',
+    password: process.env.PG_PASSWORD || 'zxcv0ZXC',
+    port: process.env.PG_PORT || 3211,
   })
 client.connect()
 
@@ -61,6 +61,15 @@ class DAO {
         console.log('DAO - addSessionSubjectRelation');
         return client
         .query('INSERT INTO session_subject(session, subject) VALUES($1, $2)',
+                 [session, subject])
+        .then(res => res.rowCount == 1)
+        .catch(e => { console.error(e.stack); return false;});
+    }
+
+    async removeSessionSubjectRelation(session, subject) {
+        console.log('DAO - removeSessionSubjectRelation');
+        return client
+        .query('DELETE FROM session_subject WHERE session=$1 AND subject=$2',
                  [session, subject])
         .then(res => res.rowCount == 1)
         .catch(e => { console.error(e.stack); return false;});
