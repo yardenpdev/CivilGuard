@@ -1,0 +1,15 @@
+table {
+    width: 80vw;
+    max-width: 800px;
+    border: 1px solid black;
+    padding: 0;
+}
+
+td {
+    border: 1px solid grey;
+    margin: 0;
+}
+
+body {
+    direction: rtl;
+}

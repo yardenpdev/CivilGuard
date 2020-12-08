@@ -1,19 +1,21 @@
 'use strict';
 
-var app = require('express')();
-var http = require('http');
-var swaggerTools = require('swagger-tools');
+const express = require('express');
+const app = express()
+const http = require('http');
+const swaggerTools = require('swagger-tools');
 
 var serverPort = 3000;
+app.use(express.static('./front'))
 
 // swaggerRouter configuration
-var options = {
+const options = {
   controllers: './controllers',
   useStubs: process.env.NODE_ENV === 'development' ? true : false // Conditionally turn on stubs (mock mode)
 };
 
 // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
-var swaggerDoc = require('./api/swagger.json');
+const swaggerDoc = require('./api/swagger.json');
 
 // Initialize the Swagger middleware
 swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {

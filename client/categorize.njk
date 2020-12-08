@@ -1,0 +1,27 @@
+{% extends "./base.njk" %}
+{% block title %}
+בחירת נושאים
+{% endblock %}
+{% block main %}
+<form id="categorize">
+    <h2>בחר נושאים עבור הדיונים הבאים:</h2>
+        <table>
+            <thead>
+                <td>דיונים</td>
+                <td>נושאים</td>
+            <tbody>
+                <tr>
+                    <td class="issue"></td>
+                    <td class="subjects">
+                        <span class="subject">
+                            
+                            <label><input type="checkbox">
+                            <span class="title" />
+                            </label>
+                        </span>
+                    </td>
+                </tr>
+    </table>
+</form>
+<script type="module" src="/scripts/categorize.js"></script>
+{% endblock %}
