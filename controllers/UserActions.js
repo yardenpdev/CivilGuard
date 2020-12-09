@@ -10,10 +10,11 @@ module.exports = {
   addRemark: async (req, res, next) => {
     console.log("addRemark");
 
-    var session_id = req.param('session_id');
-    var remark = req.param('remark');
+    const user_id = req.user.id
+    const session_id = req.body.session_id
+    const remark = req.body.remark
 
-    var success = await dao.addRemarkToSession(user_id, session_id, remark);
+    const success = await dao.addRemarkToSession(user_id, session_id, remark);
     console.log(success);
 
     res.header('Content-Type', 'application/json')

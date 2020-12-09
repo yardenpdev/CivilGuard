@@ -15,6 +15,10 @@ module.exports = {
     },
 
     addSessionSubject: async (req, res, next) => {
+        if (!req.user) {
+            res.status(401).send('Unaothorized')
+            return
+        }
         console.log("addSessionSubject")
         const {session_id, subject} = req.body
         const success = await dao.addSessionSubjectRelation(session_id, subject)
@@ -23,6 +27,11 @@ module.exports = {
     },
     
     removeSessionSubject: async (req, res, next) => {
+        if (!req.user) {
+            res.status(401).send('Unaothorized')
+            return
+        }
+
         console.log("delSessionSubject")
         const {session_id, subject} = req.body
         const success = await dao.removeSessionSubjectRelation(session_id, subject)

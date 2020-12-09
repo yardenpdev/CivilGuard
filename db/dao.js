@@ -40,12 +40,16 @@ class DAO {
         return response.rows.length > 0 ? response.rows[0].subjects : []
     }
     
-    async insertUser(user_id, user_name) {
+    async insertOrUpdateUser({id, name, photo, email}) {
         console.log('DAO - insertUser');
         var date_added = new Date();
 
-        const res = await client.query('INSERT INTO users(user_id, name, date_created, subjects, last_updated) VALUES($1, $2, $3, $4, $5)',
-                    [user_id, user_name, date_added, [], date_added])
+        const exists = await client.query('SELECT user_id FROM users WHERE user_id=$1', [id])
+        if (exists.rowCount === 1)
+            return
+
+        const res = await client.query('INSERT INTO users(user_id, name, email, photo, date_created, subjects, last_updated) VALUES($1, $2, $3, $4, $5, $6, $7)',
+                    [id, name, email, photo, date_added, [], date_added])
         return res.rowCount == 1
     }
 

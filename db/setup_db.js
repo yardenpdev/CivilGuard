@@ -15,7 +15,7 @@ async function createDB() {
         )
 
         await client.query(
-            "CREATE TABLE users (user_id  varchar(80) PRIMARY KEY, name varchar(80), date_created date, subjects varchar(32)[], last_updated date);"
+            "CREATE TABLE users (user_id  varchar(80) PRIMARY KEY, name varchar(80), photo varchar(256), email varchar(80), date_created date, subjects varchar(32)[], last_updated date);"
         )
 
         await client.query(

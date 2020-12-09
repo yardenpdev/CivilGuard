@@ -129,13 +129,6 @@
                 "description": "set subjects to a user",
                 "parameters": [
                 {
-                    "name": "user_id",
-                    "in": "formData",
-                    "description": "user ID",
-                    "required": true,
-                    "type": "string"
-                },
-                {
                     "name": "subjects",
                     "in": "formData",
                     "description": "subjects to register to the user",
@@ -165,15 +158,6 @@
                 "x-swagger-router-controller": "User",
                 "operationId": "getSubjects",
                 "description": "get subjects user is registred",
-                "parameters": [
-                {
-                    "name": "user_id",
-                    "in": "query",
-                    "description": "user ID",
-                    "required": true,
-                    "type": "string"
-                }
-                ],
                 "responses": {
                 "default": {
                     "description": "Invalid request.",
