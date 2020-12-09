@@ -1,0 +1,17 @@
+{% extends "./base.njk" %}
+{% block title %}
+הערות לישיבה
+{% endblock %}
+{% block main %}
+<form id="remarks">
+    <h3 id="committee"></h3>
+    <h3 id="date"></h3>
+    <a id="session" target="knesset"></a>
+    <h2>הערות:</h2>
+    <ul id="remarkList">
+        <li>
+            <label></label>
+    </ul>
+</form>
+<script type="module" src="/scripts/remarks.js"></script>
+{% endblock %}

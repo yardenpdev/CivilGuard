@@ -217,9 +217,9 @@
                 "description": "get session remarks",
                 "parameters": [
                 {
-                    "name": "committee_id",
+                    "name": "session_id",
                     "in": "query",
-                    "description": "commitee ID",
+                    "description": "session ID",
                     "required": true,
                     "type": "string"
                 }

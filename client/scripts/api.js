@@ -38,6 +38,8 @@ const queryKnesset = async path => {
     if (error)
         throw error
     const nextLink = data['odata.nextLink']
+    if (!data.value)
+        return data
     return [...data.value, ...(nextLink ? await queryKnesset(nextLink) : [])]
 }
 
@@ -70,6 +72,21 @@ export async function getKnessetData({startDate, endDate}) {
     }))
 }
 
+export async function getSessionData(sessionItemID) {
+    const item = await queryKnesset(`KNS_CmtSessionItem(${sessionItemID})?$expand=KNS_CommitteeSession/KNS_Committee`)
+    const session = item.KNS_CommitteeSession
+    const committee = session.KNS_Committee
+    delete session.KNS_Committee
+    delete item.KNS_CommitteeSession
+    const subjects = await getSessionSubjects(item.CmtSessionItemID)
+    const remarks = await getSessionRemarks(item.CmtSessionItemID)
+    return {item, session, committee, subjects}
+}
+
+export async function getSessionRemarks(sessionItemID) {
+    const response = await fetch(`/api/remarks?session_id=${sessionItemID}`)
+    return (await response.json()).remarks
+}
 
 export async function getCurrentUser() {
     const response = await fetch('/me')

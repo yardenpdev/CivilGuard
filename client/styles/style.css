@@ -24,3 +24,20 @@ body {
 #self_thumb {
     max-width: 32px;
 }
+
+#categorize {
+    opacity: 0;
+    transition: opacity 300ms ease-in;
+}
+
+#loading {
+    transition: opacity 100ms ease-in;
+}
+
+#categorize[data-ready="true"] {
+    opacity: 100%;
+}
+
+#categorize[data-ready="true"] + #loading {
+    opacity: 0;
+}

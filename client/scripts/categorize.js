@@ -48,7 +48,6 @@ window.addEventListener('DOMContentLoaded', async () => {
         for (const {session, items, committee} of sessions) {
             for (const item of items) {
                 const itemSubjects = await api.getSessionSubjects(item.CmtSessionItemID)
-                console.log(itemSubjects)
                 const element = issueTemplate.cloneNode(true)
                 element.querySelector('.committee').innerText = committee.Name
                 element.querySelector('.date').innerText = new Date(session.StartDate).toLocaleString('he-IL')
@@ -70,7 +69,9 @@ window.addEventListener('DOMContentLoaded', async () => {
 
                 table.appendChild(element)
             }
-        }        
+        }  
+
+        categorizeForm.dataset.ready = true      
     }
 
     fromDate.onchange = render

@@ -32,7 +32,7 @@ module.exports = {
     const session_id = req.session_id;
     const response = await dao.getRemarksOfSession(session_id);
     res.header('Content-Type', 'application/json')
-    res.end(JSON.stringify({'remarks': response.rows[0].text}));
+    res.end(JSON.stringify({'remarks': response.map(r => r.text)}));
   }
 }
 
