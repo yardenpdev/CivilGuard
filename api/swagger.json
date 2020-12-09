@@ -17,14 +17,14 @@
                 "parameters": [
                 {
                     "name": "name",
-                    "in": "query",
+                    "in": "formData",
                     "description": "the user name",
                     "required": true,
                     "type": "string"
                 },
                 {
                     "name": "id",
-                    "in": "query",
+                    "in": "formData",
                     "description": "the user ID",
                     "required": true,
                     "type": "string"
@@ -47,6 +47,82 @@
             }
         },
         "/subjects": {
+            "post": {
+                "x-swagger-router-controller": "Subject",
+                "operationId": "addSubject",
+                "description": "Add a subject",
+                "parameters": [
+                {
+                    "name": "subject",
+                    "in": "formData",
+                    "description": "Subject text",
+                    "required": true,
+                    "type": "string"
+                } ],
+                "responses": {
+                    "default": {
+                        "description": "Invalid request.",
+                        "schema": {
+                        "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "200": {
+                        "description": "subjects added successfuly.",
+                        "schema": {
+                        "$ref": "#/definitions/Success"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "x-swagger-router-controller": "Subject",
+                "operationId": "deleteSubject",
+                "description": "Delete a subject",
+                "parameters": [
+                {
+                    "name": "subject",
+                    "in": "formData",
+                    "description": "Subject text",
+                    "required": true,
+                    "type": "string"
+                } ],
+                "responses": {
+                    "default": {
+                        "description": "Invalid request.",
+                        "schema": {
+                        "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "200": {
+                        "description": "subjects deleted successfuly.",
+                        "schema": {
+                        "$ref": "#/definitions/Success"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "x-swagger-router-controller": "Subject",
+                "operationId": "getSubjects",
+                "description": "get all subjects",
+                "responses": {
+                "default": {
+                    "description": "Invalid request.",
+                    "schema": {
+                    "$ref": "#/definitions/Error"
+                    }
+                },
+                "200": {
+                    "description": "All possible subjects.",
+                    "schema": {
+                    "$ref": "#/definitions/Subjects"
+                    }
+                }
+                }
+            }
+        },       
+        
+        "/user_subjects": {
             "post": {
                 "x-swagger-router-controller": "User",
                 "operationId": "setSubjects",
@@ -122,14 +198,14 @@
                 "parameters": [
                 {
                     "name": "committee_id",
-                    "in": "query",
+                    "in": "formData",
                     "description": "commitee ID",
                     "required": true,
                     "type": "string"
                 },
                 {
                     "name": "remark",
-                    "in": "query",
+                    "in": "formData",
                     "description": "user remark on the commitee",
                     "required": true,
                     "type": "string"
@@ -187,14 +263,11 @@
                 "description": "get subjects of a session",
                 "parameters": [
                 {
-                    "name": "subjects",
+                    "name": "session_id",
                     "in": "query",
-                    "description": "retrieve the sessions connected to the subjects",
+                    "description": "retrieve the subjects for a session",
                     "required": true,
-                    "type": "array",
-                    "items":{
-                        "type": "string"
-                    }
+                    "type": "string"
                 }
                 ],
                 "responses": {
@@ -220,14 +293,14 @@
                 {
                     "name": "subject",
                     "description": "subject",
-                    "in": "query",
+                    "in": "formData",
                     "required": true,
                     "type": "string"
                 },
                 {
                     "name": "session_id",
                     "description": "id of the session",
-                    "in": "query",
+                    "in": "formData",
                     "required": true,
                     "type": "string"
                 }
@@ -254,14 +327,14 @@
                 "description": "remove session and subject connection",
                 "parameters": [
                 {
-                    "in": "query",
+                    "in": "formData",
                     "name": "subject",
                     "description": "subject",
                     "required": true,
                     "type": "string"
                 },
                 {
-                    "in": "query",
+                    "in": "formData",
                     "name": "session_id",
                     "description": "id of the session",
                     "required": true,

@@ -12,10 +12,9 @@ class DAO {
 
     async getRemarksOfSession(session_id) {
         console.log('DAO - getRemarksOfSession');
-        return client
-        .query('SELECT * from remarks where session_id = $1', [session_id])
-        /// chenge to group_by
-        .catch(e => {console.error(e.stack); return false})
+        const res = await client
+            .query('SELECT * from remarks where session_id = $1', [session_id])
+        return res.rows
     }
 
     async addRemarkToSession(user_id, session_id, remark) {
@@ -30,67 +29,77 @@ class DAO {
 
     async setSubjectsToUser(user_id, subjects) {
         console.log('DAO - addSubjectsToUser');
-        return client
-        .query("UPDATE users SET subjects = $1 WHERE user_id = $2",
+        const res = await client.query("UPDATE users SET subjects = $1 WHERE user_id = $2",
                  [subjects, user_id])
-        .then(res => res.rowCount == 1)
-        .catch(e => { console.error(e.stack); return false;});
+        return res.rowCount === 1
     }
 
     async getUserSubjects(user_id) {
         console.log('DAO - getUserSubjects')
-
-        return client
-        .query('SELECT * from users where user_id = $1', [user_id])
-        .then(response => response.rows.length > 0 ? response.rows[0].subjects: false)
-        .catch(e => {console.error(e.stack); return false})
+        const response = await client.query('SELECT * from users where user_id = $1', [user_id])
+        return response.rows.length > 0 ? response.rows[0].subjects : []
     }
     
     async insertUser(user_id, user_name) {
         console.log('DAO - insertUser');
         var date_added = new Date();
 
-        return client
-        .query('INSERT INTO users(user_id, name, date_created, subjects, last_updated) VALUES($1, $2, $3, $4, $5)',
-                 [user_id, user_name, date_added, [], date_added])
-        .then(res => res.rowCount == 1)
-        .catch(e => { console.error(e.stack); return false;});
+        const res = await client.query('INSERT INTO users(user_id, name, date_created, subjects, last_updated) VALUES($1, $2, $3, $4, $5)',
+                    [user_id, user_name, date_added, [], date_added])
+        return res.rowCount == 1
     }
 
     async addSessionSubjectRelation(session, subject) {
         console.log('DAO - addSessionSubjectRelation');
-        return client
-        .query('INSERT INTO session_subject(session, subject) VALUES($1, $2)',
-                 [session, subject])
-        .then(res => res.rowCount == 1)
-        .catch(e => { console.error(e.stack); return false;});
+        const res = await client
+                            .query('INSERT INTO session_subject(session, subject) VALUES($1, $2)',
+                            [session, subject])
+        return res.rowCount === 1
     }
 
     async removeSessionSubjectRelation(session, subject) {
         console.log('DAO - removeSessionSubjectRelation');
-        return client
-        .query('DELETE FROM session_subject WHERE session=$1 AND subject=$2',
+        const res = await client
+            .query('DELETE FROM session_subject WHERE session=$1 AND subject=$2',
                  [session, subject])
-        .then(res => res.rowCount == 1)
-        .catch(e => { console.error(e.stack); return false;});
+        return res.rowCount === 1
     }
 
-    async getSubjectsOfSession(session_id) {
+    async getSubjectsBySession(session_id) {
         console.log('DAO - getSessionSubjects')
-
-        return client
-        .query('SELECT subject from session_subject where session = $1', [session_id])
-        .then(response => response.rows.map(row => row.subject))
-        .catch(e => {console.error(e.stack); return false})
+        const response = await client.query('SELECT subject from session_subject where session = $1', [session_id])
+        return response.rows.map(row => row.subject)
     }
-    async getSessionsOfSubjects(subjects) {
-        console.log('DAO - getSessionsOfSubjects')
 
-        return client
-        .query('SELECT session from session_subject where subject = ANY($1)', [subjects])
-        // TODO add group_by
-        .then(response => response.rows.map(row => row))
-        .catch(e => {console.error(e.stack); return false})
+    async getAllSubjects() {
+        console.log('DAO - getAllSubjects')
+        const response = await client.query('SELECT * from subject')
+        return response.rows.map(s => s.title)
+    }
+
+    async addSubject(subject) {
+        console.log('DAO - addSubject')
+        const response = await client.query('INSERT INTO subject (title) VALUES($1)', [subject])
+        return response.rows
+    }
+
+    async deleteSubject(subject) {
+        console.log('DAO - addSubject')
+        const response = await client.query('DELETE FROM subject WHERE title=$1', [subject])
+        if (response.rowCount !== 1)
+            return false
+
+        response2 = await client
+            .query('DELETE FROM session_subject WHERE subject=$1',
+                 [subject])
+
+        return true
+    }
+
+    async getSessionsBySubject(subjects) {
+        console.log('DAO - getSessionsOfSubjects')
+        const response = await client.query('SELECT session from session_subject where subject = ANY($1)', [subjects])
+        return response.rows
     }
 
 }

@@ -21,6 +21,10 @@ async function createDB() {
         await client.query(
             "CREATE TABLE session_subject (session  varchar(80), subject varchar(80));"
         )
+
+        await client.query(
+            "CREATE TABLE subject (title VARCHAR(80) PRIMARY KEY);"
+        )
     } catch (e) {
         console.error(e)
     }

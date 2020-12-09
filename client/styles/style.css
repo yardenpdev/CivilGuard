@@ -5,9 +5,16 @@ table {
     padding: 0;
 }
 
+.subject {
+    white-space: nowrap;
+}
 td {
     border: 1px solid grey;
     margin: 0;
+}
+
+td.date {
+    white-space: nowrap;
 }
 
 body {

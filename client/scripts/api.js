@@ -1,26 +1,32 @@
-export function toggleSubject(issue, subject, enabled) {
-    const current = issue.subjects.indexOf(subject)
-    if (enabled && current < 0)
-        issue.subjects.push(subject)        
-    else if (current >= 0)
-        issue.subjects.splice(current, 1)
+export async function toggleSubject(item, subject, enabled) {
+    const body = new FormData()
+    body.append('session_id', item);
+    body.append('subject', subject);
+    return await fetch('/api/session_subjects', {method: 'POST', body})
+}
 
-    return saveIssue(issue)
+export async function getSessionSubjects(item) {
+    const response = await fetch(`/api/session_subjects?session_id=${item}`)
+    const json = await response.json()
+    return json.subjects
 }
 
 export async function getSubjects() {
-    return ['s1', 's2']
+    const response = await fetch('/api/subjects')
+    return (await response.json()).subjects
 }
 
-export function addSubject(name) {
-
+export async function addSubject(title) {
+    const body = new FormData()
+    body.append('subject', title);
+    return await fetch('/api/subjects', {method: 'POST', body})
 }
 
-export function saveIssue(issue) {
+export async function deleteSubject(title) {
+    const body = new FormData()
+    body.append('subject', title);
 
-}
-
-export function removeSubject(name) {
+    return await fetch('/api/subjects', {method: 'DELETE', body})
 
 }
 

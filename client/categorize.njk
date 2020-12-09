@@ -4,21 +4,30 @@
 {% endblock %}
 {% block main %}
 <form id="categorize">
-    <h2>בחר תאריכים:</h2>
+    <h2>טווח תאריכים:</h2>
     <input type="date" id="fromDate" />
     <input type="date" id="toDate" />
+    <h2>נושאים:</h2>
+    <ul id="subjectList">
+        <li><label></label><input type="button" value="מחק" />
+    </ul>
+    <label>נושא חדש:
+    <input type="text" id="newSubjectName" />
+    <input type="button" value="הוסף" id="addSubject" />
+    </label>
     <h2>בחר נושאים עבור הדיונים הבאים:</h2>
+        <div id="scroller">
         <table>
             <thead>
-                <td>תאריך</td>
-                <td>ועדה</td>
-                <td>דיון</td>
-                <td>נושאים</td>
+                <td>תאריך
+                <td>ועדה
+                <td>דיון
+                <td>נושאים
             <tbody>
                 <tr>
-                    <td class="date"></td>
-                    <td class="committee"></td>
-                    <td><a class="issue" target="knesset"></a></td>
+                    <td class="date">
+                    <td class="committee">
+                    <td><a class="issue" target="knesset"></a>
                     <td class="subjects">
                         <span class="subject">
                             
@@ -26,9 +35,8 @@
                             <span class="title" />
                             </label>
                         </span>
-                    </td>
-                </tr>
     </table>
+    </div>
 </form>
 <script type="module" src="/scripts/categorize.js"></script>
 {% endblock %}
