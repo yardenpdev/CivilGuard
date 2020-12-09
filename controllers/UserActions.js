@@ -9,6 +9,10 @@ const dao = new DAO();
 module.exports = {
   addRemark: async (req, res, next) => {
     console.log("addRemark");
+    if (!req.user) {
+        res.status(401).send('Unaothorized')
+        return
+    }
 
     const user_id = req.user.id
     const session_id = req.body.session_id

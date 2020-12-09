@@ -51,6 +51,11 @@ app.use(cookieSession({maxAge: 30 * 24 * 60 * 60 * 1000, keys: [process.env.COOK
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get('/me', (req, res, next) => {
+  res.send({user: req.user || null})
+  next()
+})
+
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'] }));
 

@@ -43,7 +43,13 @@ const queryKnesset = async path => {
 
 
 export async function getSessionItems(sessionIDs) {
-    return queryKnesset(`KNS_CmtSessionItem()?$filter=${sessionIDs.map(id => `CommitteeSessionID eq ${id}`).join(' or ')}`)    
+    const reqs = await Promise.all(sessionIDs.map(id =>
+        queryKnesset(`KNS_CmtSessionItem()?$filter=CommitteeSessionID eq ${id}`
+    )))
+
+    debugger
+
+    return reqs.flat()
 }
 
 export async function getCommittees(ids) {
@@ -65,4 +71,18 @@ export async function getKnessetData({startDate, endDate}) {
         committee: committees[session.CommitteeID],
         items: sessionItems.filter(item => item.CommitteeSessionID === session.CommitteeSessionID)
     }))
+}
+
+
+export async function getCurrentUser() {
+    const response = await fetch('/me')
+    return (await response.json()).user
+}
+
+export async function ensureCurrentUser() {
+    const self = await getCurrentUser()
+    if (self)
+        return self
+
+    location.href = `/auth/google?next=${location.href}`
 }

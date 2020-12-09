@@ -1,6 +1,6 @@
 import * as api from './api.js'
-
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
+    const me = await api.ensureCurrentUser()
     const categorizeForm = document.querySelector('#categorize')
     const table = categorizeForm.querySelector('table > tbody')
     const issueTemplate = categorizeForm.querySelector('tbody tr')
