@@ -1,28 +1,26 @@
 {% extends "./base.njk" %}
 {% block title %}
-בחירת נושאים
+ועדות והערות
 {% endblock %}
 {% block main %}
-<form id="categorize">
+<form id="main">
     <h2>טווח תאריכים:</h2>
     <input type="date" id="fromDate" />
     <input type="date" id="toDate" />
     <h2>נושאים:</h2>
+    <label>
+        <input type="checkbox" class="selectAll" value="" checked> כל הנושאים</label>
     <ul id="subjectList">
-        <li><label></label><input type="button" value="מחק" />
+        <li><label><input type="checkbox" class="filter" /><span class="label"></span></label>
     </ul>
-    <label>נושא חדש:
-    <input type="text" id="newSubjectName" />
-    <input type="button" value="הוסף" id="addSubject" />
-    </label>
-    <h2>בחר נושאים עבור הדיונים הבאים:</h2>
-        <div id="scroller">
+    <h2>דיונים:</h2>
         <table>
             <thead>
                 <td>תאריך
                 <td>ועדה
                 <td>דיון
                 <td>נושאים
+                <td>פעולות
             <tbody>
                 <tr>
                     <td class="date">
@@ -30,13 +28,16 @@
                     <td><a class="issue" target="knesset"></a>
                     <td class="subjects">
                         <span class="subject">
-                            
-                            <label><input type="checkbox">
-                            <span class="title" />
-                            </label>
+                            <span class="title"></a>
                         </span>
-    </table>
-    </div>
+                    <td>
+                        <a class="remarks">הערות</a>
+                        <a class="info" target="knesset">מידע</a>
+        </table>
 </form>
-<script type="module" src="/scripts/categorize.js"></script>
+<div id="loading">
+    תוכן בטעינה
+</div>
+
+<script type="module" src="/scripts/main.js"></script>
 {% endblock %}

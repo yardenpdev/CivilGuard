@@ -29,7 +29,7 @@ body {
     min-width: 200px;
 }
 
-#categorize {
+#categorize, #main {
     opacity: 0;
     transition: opacity 300ms ease-in;
 }
@@ -38,10 +38,10 @@ body {
     transition: opacity 100ms ease-in;
 }
 
-#categorize[data-ready="true"] {
+#main[data-ready="true"], #categorize[data-ready="true"] {
     opacity: 100%;
 }
 
-#categorize[data-ready="true"] + #loading {
+form[data-ready="true"] + #loading {
     opacity: 0;
 }
