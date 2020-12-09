@@ -46,9 +46,6 @@ export async function getSessionItems(sessionIDs) {
     const reqs = await Promise.all(sessionIDs.map(id =>
         queryKnesset(`KNS_CmtSessionItem()?$filter=CommitteeSessionID eq ${id}`
     )))
-
-    debugger
-
     return reqs.flat()
 }
 

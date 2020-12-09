@@ -20,3 +20,7 @@ td.date {
 body {
     direction: rtl;
 }
+
+#self_thumb {
+    max-width: 32px;
+}
