@@ -4,14 +4,21 @@
 {% endblock %}
 {% block main %}
 <form id="categorize">
+    <h2>בחר תאריכים:</h2>
+    <input type="date" id="fromDate" />
+    <input type="date" id="toDate" />
     <h2>בחר נושאים עבור הדיונים הבאים:</h2>
         <table>
             <thead>
-                <td>דיונים</td>
+                <td>תאריך</td>
+                <td>ועדה</td>
+                <td>דיון</td>
                 <td>נושאים</td>
             <tbody>
                 <tr>
-                    <td class="issue"></td>
+                    <td class="date"></td>
+                    <td class="committee"></td>
+                    <td><a class="issue" target="knesset"></a></td>
                     <td class="subjects">
                         <span class="subject">
                             
