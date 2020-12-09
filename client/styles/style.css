@@ -21,8 +21,12 @@ body {
     direction: rtl;
 }
 
-#self_thumb {
+#self_thumb, .thumb {
     max-width: 32px;
+}
+
+.remark {
+    min-width: 200px;
 }
 
 #categorize {

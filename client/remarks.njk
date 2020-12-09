@@ -8,10 +8,17 @@
     <h3 id="date"></h3>
     <a id="session" target="knesset"></a>
     <h2>הערות:</h2>
-    <ul id="remarkList">
-        <li>
-            <label></label>
-    </ul>
+    <table>
+        <tbody id="remarkList" >
+            <tr>
+                <td class="date">
+                <td><img class="thumb"><span class="name" />
+                <td><label class="remark"></label>
+                <td><input type="button" class="delete" value="הסר" />
+        </tbody>
+    </table>
+    <label>הוסף הערה: <input type="text" id="newRemark" /></label>
+    <input type="button" id="addRemark" value="הוסף" />
 </form>
 <script type="module" src="/scripts/remarks.js"></script>
 {% endblock %}

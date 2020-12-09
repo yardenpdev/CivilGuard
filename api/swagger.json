@@ -181,9 +181,9 @@
                 "description": "add a user remark to the commitee",
                 "parameters": [
                 {
-                    "name": "committee_id",
+                    "name": "session_id",
                     "in": "formData",
-                    "description": "commitee ID",
+                    "description": "session ID",
                     "required": true,
                     "type": "string"
                 },
@@ -205,6 +205,42 @@
                 },
                 "200": {
                     "description": "remark loged successfuly.",
+                    "schema": {
+                    "$ref": "#/definitions/Success"
+                    }
+                }
+                }
+            },
+            "delete": {
+                "x-swagger-router-controller": "UserActions",
+                "operationId": "deleteRemark",
+                "description": "remove a user remark",
+                "parameters": [
+                {
+                    "name": "session_id",
+                    "in": "formData",
+                    "description": "session ID",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "name": "remark",
+                    "in": "formData",
+                    "description": "user remark on the commitee",
+                    "required": true,
+                    "type": "string"
+                }
+                ],
+                
+                "responses": {
+                "default": {
+                    "description": "Invalid request.",
+                    "schema": {
+                    "$ref": "#/definitions/Error"
+                    }
+                },
+                "200": {
+                    "description": "remark deleted successfuly.",
                     "schema": {
                     "$ref": "#/definitions/Success"
                     }

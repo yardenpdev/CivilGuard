@@ -26,13 +26,33 @@ module.exports = {
     res.end(JSON.stringify({success}));
   },
   
+  deleteRemark: async (req, res, next) => {
+    console.log("deleteRemark");
+    if (!req.user) {
+        res.status(401).send('Unaothorized')
+        return
+    }
+
+    console.log(req.body)
+
+    const user_id = req.user.id
+    const session_id = req.body.session_id
+    const remark = req.body.remark
+
+    const success = await dao.deleteRemark(user_id, session_id, remark);
+
+    res.header('Content-Type', 'application/json')
+
+    res.end(JSON.stringify({success}));
+  },
+  
   getRemarks: async (req, res, next) => {
     console.log("getRemarks");
     // get committee details - api call
-    const session_id = req.session_id;
-    const response = await dao.getRemarksOfSession(session_id);
+    const session_id = req.query.session_id;
+    const remarks = await dao.getRemarksOfSession(session_id);
     res.header('Content-Type', 'application/json')
-    res.end(JSON.stringify({'remarks': response.map(r => r.text)}));
+    res.end(JSON.stringify({remarks}));
   }
 }
 

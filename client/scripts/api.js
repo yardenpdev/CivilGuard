@@ -80,7 +80,23 @@ export async function getSessionData(sessionItemID) {
     delete item.KNS_CommitteeSession
     const subjects = await getSessionSubjects(item.CmtSessionItemID)
     const remarks = await getSessionRemarks(item.CmtSessionItemID)
-    return {item, session, committee, subjects}
+    return {item, session, committee, subjects, remarks}
+}
+
+export async function addSessionRemark(sessionItemID, remark) {
+    const body = new FormData()
+    body.append('session_id', sessionItemID)
+    body.append('remark', remark)
+    const response = await fetch(`/api/remarks`, {method: 'POST', body})
+    return (await response.json())
+}
+
+export async function deleteRemark(sessionItemID, remark) {
+    const body = new FormData()
+    body.append('session_id', sessionItemID)
+    body.append('remark', remark)
+    const response = await fetch(`/api/remarks`, {method: 'DELETE', body})
+    return (await response.json())
 }
 
 export async function getSessionRemarks(sessionItemID) {

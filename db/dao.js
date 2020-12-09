@@ -11,9 +11,9 @@ client.connect()
 class DAO {
 
     async getRemarksOfSession(session_id) {
-        console.log('DAO - getRemarksOfSession');
+        console.log(`DAO - getRemarksOfSession ${session_id}`);
         const res = await client
-            .query('SELECT * from remarks where session_id = $1', [session_id])
+            .query('SELECT remarks.user_id as user_id, name, photo, text, time_inserted from remarks INNER JOIN users ON remarks.user_id=users.user_id where remarks.session_id = $1', [session_id])
         return res.rows
     }
 
@@ -23,6 +23,15 @@ class DAO {
         return client
         .query('INSERT INTO remarks(user_id, text, time_inserted, session_id) VALUES($1, $2, $3, $4)',
                  [user_id, remark, date_added, session_id])
+        .then(res => res.rowCount == 1)
+        .catch(e => { console.error(e.stack); return false;});
+    }
+
+    async deleteRemark(user_id, session_id, remark) {
+        console.log(`DAO - deleteRemark ${user_id} ${session_id} ${remark}`);
+        return client
+        .query('DELETE FROM remarks WHERE user_id=$1 AND session_id=$2 AND text=$3',
+                 [user_id, session_id, remark])
         .then(res => res.rowCount == 1)
         .catch(e => { console.error(e.stack); return false;});
     }
