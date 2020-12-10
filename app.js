@@ -22,7 +22,7 @@ const HOST = process.env.HOST || 'http://localhost'
 passport.use(new OAuth2Strategy({
     clientID: process.env.GOOG_CLIENT_ID,
     clientSecret: process.env.GOOG_CLIENT_SECRET,
-    callbackURL: `${HOST}:${PORT}/auth/google/callback`
+    callbackURL: `${HOST}:${EXTERNAL_PORT}/auth/google/callback`
   }, async (token, tokenSecret, profile, done) => {
       const user_id = `goog://${profile.id}`
       const email = profile.emails[0]
