@@ -1,12 +1,10 @@
 const { Client } = require('pg')
 const client = new Client({
-    user: process.env.PG_USER || 'postgres',
-    host: process.env.PG_HOST || 'localhost',
-    database: process.env.PG_DB || 'mishmar',
-    password: process.env.PG_PASSWORD || 'zxcv0ZXC',
-    port: process.env.PG_PORT || 3211,
-  })
+    connectionString: process.env.DATABASE_URL,
+})
+
 client.connect()
+
 
 class DAO {
 
@@ -87,6 +85,7 @@ class DAO {
     async getAllSubjects() {
         console.log('DAO - getAllSubjects')
         const response = await client.query('SELECT * from subject')
+        console.log(response)
         return response.rows.map(s => s.title)
     }
 

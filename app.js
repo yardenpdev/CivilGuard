@@ -12,6 +12,7 @@ const swaggerDoc = require('./api/swagger.json');
 const User = require('./controllers/User')
 
 const PORT = process.env.PORT || 3000
+const EXTERNAL_PORT = process.env.EXTERNAL_PORT || PORT
 const HOST = process.env.HOST || 'http://localhost'
 // Use the GoogleStrategy within Passport.
 //   Strategies in passport require a `verify` function, which accept
@@ -57,7 +58,10 @@ app.get('/me', (req, res, next) => {
 })
 
 app.get('/auth/google',
-  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'] }));
+  passport.authenticate('google', 
+  { scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'],
+    state:  
+  }));
 
 // GET /auth/google/callback
 //   Use passport.authenticate() as route middleware to authenticate the
