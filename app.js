@@ -59,9 +59,7 @@ app.get('/me', (req, res, next) => {
 
 app.get('/auth/google',
   passport.authenticate('google', 
-  { scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'],
-    state:  
-  }));
+  { scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']}));
 
 // GET /auth/google/callback
 //   Use passport.authenticate() as route middleware to authenticate the
