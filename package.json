@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
-    "client:build": "eleventy --input=./client --output=./public",
+    "build": "eleventy --input=./client --output=./public",
     "client:dev": "eleventy --input=./client --output=./public --watch --serve"
   },
   "license": "MIT",
