@@ -12,8 +12,7 @@ const swaggerDoc = require('./api/swagger.json');
 const User = require('./controllers/User')
 
 const PORT = process.env.PORT || 3000
-const EXTERNAL_PORT = process.env.EXTERNAL_PORT || PORT
-const HOST = process.env.HOST || 'http://localhost'
+const HOST = process.env.HOST || `http://localhost:${PORT}`
 // Use the GoogleStrategy within Passport.
 //   Strategies in passport require a `verify` function, which accept
 //   credentials (in this case, a token, tokenSecret, and Google profile), and
@@ -22,7 +21,7 @@ const HOST = process.env.HOST || 'http://localhost'
 passport.use(new OAuth2Strategy({
     clientID: process.env.GOOG_CLIENT_ID,
     clientSecret: process.env.GOOG_CLIENT_SECRET,
-    callbackURL: `${HOST}:${EXTERNAL_PORT}/auth/google/callback`
+    callbackURL: `${HOST}/auth/google/callback`
   }, async (token, tokenSecret, profile, done) => {
       const user_id = `goog://${profile.id}`
       const email = profile.emails[0]
