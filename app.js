@@ -26,10 +26,10 @@ passport.use(new OAuth2Strategy({
       const user_id = `goog://${profile.id}`
       const email = profile.emails[0]
       const photo = profile.photos[0]
-      const user = {id: user_id, name: profile.displayName, photo: photo ? photo.value : '', email: email ? email.value : ''}
+      let user = {id: user_id, name: profile.displayName, photo: photo ? photo.value : '', email: email ? email.value : ''}
       console.log(user)
       try {
-        User.insertOrUpdateUser(user)
+        user = User.insertOrUpdateUser(user)
       } catch (e) {
         done(e)
       } finally {
@@ -37,6 +37,7 @@ passport.use(new OAuth2Strategy({
       }
   }
 ))
+
 passport.serializeUser(function(user, done) {
   done(null, user);
 });
@@ -55,6 +56,10 @@ app.get('/me', (req, res, next) => {
   res.send({user: req.user || null})
   next()
 })
+app.get('/logout', function(req, res){
+  req.logout()
+  res.redirect('/')
+});
 
 app.get('/auth/google',
   passport.authenticate('google', 

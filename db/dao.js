@@ -26,7 +26,10 @@ async function createDB() {
 
 const db = createDB()
 
-const query = async (sql, args) => (await db).query(sql, args)
+const query = async (sql, args) => { 
+    console.log({sql, args})
+    return (await db).query(sql, args)
+}
 class DAO {
 
     async getRemarksOfSession(session_id) {
@@ -69,13 +72,16 @@ class DAO {
         console.log('DAO - insertUser');
         var date_added = new Date();
 
-        const exists = await query('SELECT user_id FROM users WHERE user_id=$1', [id])
-        if (exists.rowCount === 1)
-            return
+        const exists = await query('SELECT * FROM users WHERE user_id=$1', [id])
+        if (exists.rowCount === 1) {
+            const [{name, photo, email}] = response.rows
+            return {id, name, photo, email}
+        }
 
         const res = await query('INSERT INTO users(user_id, name, email, photo, date_created, subjects, last_updated) VALUES($1, $2, $3, $4, $5, $6, $7)',
                     [id, name, email, photo, date_added, [], date_added])
-        return res.rowCount == 1
+
+        return {id, name, photo, email}
     }
 
     async addSessionSubjectRelation(session, subject) {
@@ -130,6 +136,17 @@ class DAO {
         console.log('DAO - getSessionsOfSubjects')
         const response = await query('SELECT session from session_subject where subject = ANY($1)', [subjects])
         return response.rows
+    }
+
+    async updateUserProfile(id, info) {
+        const fields = ['name', 'email', 'photo'].filter(f => Reflect.has(info, f))
+        if (!fields.length)
+            return false
+
+        const response = await query(
+            `UPDATE users SET ${fields.map((f, i) => `${f}=$${i + 2}`).join(', ')} WHERE user_id=$1`, [id, ...fields.map(f => info[f])])
+
+        return response.rowCount === 1
     }
 
 }

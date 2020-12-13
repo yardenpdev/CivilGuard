@@ -99,6 +99,15 @@ export async function deleteRemark(sessionItemID, remark) {
     return (await response.json())
 }
 
+export async function updateUserProfile({name, email, photo}) {
+    const body = new FormData()
+    body.append('name', name)
+    body.append('email', email)
+    body.append('photo', photo)
+    const response = await fetch(`/api/users`, {method: 'PUT', body})
+    return (await response.json())
+}
+
 export async function getSessionRemarks(sessionItemID) {
     const response = await fetch(`/api/remarks?session_id=${sessionItemID}`)
     return (await response.json()).remarks

@@ -10,25 +10,32 @@
     "basePath": "/api",
     "paths": {
         "/users": {
-            "post": {
+            "put": {
                 "x-swagger-router-controller": "User",
-                "operationId": "addUser",
-                "description": "Register a new user to the notification system",
+                "operationId": "updateUserProfile",
+                "description": "Update user information",
                 "parameters": [
-                {
-                    "name": "name",
-                    "in": "formData",
-                    "description": "the user name",
-                    "required": true,
-                    "type": "string"
-                },
-                {
-                    "name": "id",
-                    "in": "formData",
-                    "description": "the user ID",
-                    "required": true,
-                    "type": "string"
-                }
+                    {
+                        "name": "name",
+                        "in": "formData",
+                        "description": "The user's display name",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "email",
+                        "in": "formData",
+                        "description": "The user's email address",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "photo",
+                        "in": "formData",
+                        "description": "The user's profile photo URL",
+                        "required": false,
+                        "type": "string"
+                    }
                 ],
                 "responses": {
                 "default": {

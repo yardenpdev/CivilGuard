@@ -9,6 +9,22 @@ const dao = new DAO();
 
 module.exports = {
   insertOrUpdateUser: user => dao.insertOrUpdateUser(user),
+
+  updateUserProfile: async (req, res, next) => {
+    console.log("updateUserProfile")
+    const {name, photo, email} = req.body
+    if (!req.user) {
+      res.status(401)
+      res.send('unauthorized')
+      return
+    }
+
+    Object.assign(req.user, {name, photo, email})
+
+    const success = await dao.updateUserProfile(req.user.id, {name, photo, email});
+    res.header('Content-Type', 'application/json')
+    res.end(JSON.stringify({success}));
+  },
   
   setSubjects: async (req, res, next) => {
     console.log("setSubjects")
