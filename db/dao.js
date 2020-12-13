@@ -72,8 +72,8 @@ class DAO {
         console.log('DAO - insertUser');
         var date_added = new Date();
 
-        const exists = await query('SELECT * FROM users WHERE user_id=$1', [id])
-        if (exists.rowCount === 1) {
+        const response = await query('SELECT * FROM users WHERE user_id=$1', [id])
+        if (response.rowCount === 1) {
             const [{name, photo, email}] = response.rows
             return {id, name, photo, email}
         }
