@@ -52,10 +52,6 @@ app.use(cookieSession({maxAge: 30 * 24 * 60 * 60 * 1000, keys: [process.env.COOK
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/me', (req, res, next) => {
-  res.send({user: req.user || null})
-  next()
-})
 app.get('/logout', function(req, res){
   req.logout()
   res.redirect('/')

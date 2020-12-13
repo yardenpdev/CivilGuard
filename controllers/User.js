@@ -33,13 +33,7 @@ module.exports = {
   },
 
   getSelf: async (req, res, next) => {
-    if (!req.user) {
-      res.status(401)
-      res.send('unauthorized')
-      return
-    }    
-
-    const me = await dao.getUser(req.user.id)
+    const me = req.user ? (await dao.getUser(req.user.id)) : null
     res.header('Content-Type', 'application/json')
     res.end(JSON.stringify({user: me}));
   },

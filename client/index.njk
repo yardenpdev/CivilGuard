@@ -1,3 +1,11 @@
-<script>
-    location.href = "/profile"
+<html lang="he-IL" dir="rtl">
+<script type="module">
+    import * as api from './scripts/api.js'
+    window.addEventListener('DOMContentLoaded', async () => {
+        if (await api.getCurrentUser())
+            location.href = '/main'
+    })
 </script>
+<body>
+<h1>המשמר החברתי</h1>
+<a href="/auth/google">להתחברות עם חשבון גוגל</a>
