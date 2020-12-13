@@ -16,7 +16,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     selectAll.onchange = ({target: {checked}}) => {
         if (checked) {
-            for (const cb in mainForm.querySelectorAll('input.filter'))
+            for (const cb of mainForm.querySelectorAll('input.filter'))
                 cb.checked = false
         }
 
@@ -27,6 +27,19 @@ window.addEventListener('DOMContentLoaded', async () => {
         startDate: new Date(),
         endDate: new Date(),
         sessions: null
+    }
+    const elementSubjects = new WeakMap()
+
+    const refilter = () => {
+        const items = mainForm.querySelectorAll('.item')
+        const selectedSubjects = new Set([...subjectList.querySelectorAll('.filter:checked')].map(s => s.value))
+        items.forEach(element => {
+            const subjects = elementSubjects.get(element)
+            if (selectAll.checked || subjects.some(s => selectedSubjects.has(s)))
+                element.removeAttribute('hidden')
+            else
+                element.setAttribute('hidden', true)
+        })
     }
 
     const render = async() => {
@@ -44,14 +57,22 @@ window.addEventListener('DOMContentLoaded', async () => {
         }
 
         const subjects = await api.getSubjects()
-        console.log(subjects)
 
         for (const subj of subjects) {
             const li = subjectTemplate.cloneNode(true)
             li.querySelector('.label').innerText = subj
-            li.querySelector('.filter').onchange = ({target}) => {
-                selectAll.checked = false
-                render()
+            const checkbox = li.querySelector('.filter')
+            checkbox.value = subj
+            checkbox.onchange = ({target: {checked}}) => {
+                if (checked) {
+                    selectAll.checked = false
+                } else {
+                    const firstChecked = subjectList.querySelector('.filter:checked')
+                    if (!firstChecked)
+                        selectAll.checked = true
+                }
+
+                refilter()
             }
             subjectList.appendChild(li)
         }
@@ -60,6 +81,8 @@ window.addEventListener('DOMContentLoaded', async () => {
             for (const item of items) {
                 const itemSubjects = await api.getSessionSubjects(item.CmtSessionItemID)
                 const element = issueTemplate.cloneNode(true)
+                element.classList.add('item')
+                elementSubjects.set(element, itemSubjects)
                 element.querySelector('.committee').innerText = committee.Name
                 element.querySelector('.date').innerText = new Date(session.StartDate).toLocaleString('he-IL')
                 element.querySelector('.issue').innerText = item.Name
@@ -68,7 +91,7 @@ window.addEventListener('DOMContentLoaded', async () => {
                 const innerSubjTemplate = element.querySelector('span.subject')
                 const subjectArea = element.querySelector('.subjects') 
                 innerSubjTemplate.remove()
-                for (const subject of subjects) {
+                for (const subject of itemSubjects) {
                     const subj = innerSubjTemplate.cloneNode(true)
                     const label = subj.querySelector('.title')    
                     label.innerText = subject
@@ -82,6 +105,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         }  
 
         mainForm.dataset.ready = true      
+        refilter()
     }
 
     fromDate.onchange = render
