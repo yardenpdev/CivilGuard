@@ -10,7 +10,7 @@ async function createDB() {
     )
 
     await pgClient.query(
-        "CREATE TABLE IF NOT EXISTS users (user_id  varchar(80) PRIMARY KEY, name varchar(80), photo varchar(256), email varchar(80), date_created date, subjects varchar(32)[], last_updated date);"
+        "CREATE TABLE IF NOT EXISTS users (user_id varchar(80) PRIMARY KEY, name varchar(80), role smallint, photo varchar(256), email varchar(80), date_created date, subjects varchar(32)[], last_updated date);"
     )
 
     await pgClient.query(
@@ -146,6 +146,21 @@ class DAO {
         const response = await query(
             `UPDATE users SET ${fields.map((f, i) => `${f}=$${i + 2}`).join(', ')} WHERE user_id=$1`, [id, ...fields.map(f => info[f])])
 
+        return response.rowCount === 1
+    }
+
+    async getUsers() {
+        const response = await query('SELECT * FROM users')
+        return response.rows
+    }
+
+    async getUser(id) {
+        const response = await query('SELECT * FROM users WHERE user_id=$1', [id])
+        return response.rows[0]
+    }
+
+    async setUserRole(id, role) {
+        const response = await query('UPDATE users SET role=$1 WHERE user_id=$2', [role, id])
         return response.rowCount === 1
     }
 

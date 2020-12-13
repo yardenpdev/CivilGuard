@@ -6,9 +6,62 @@
 
 const DAO = require('../db/dao.js')
 const dao = new DAO();
+const ROLES = {
+  admin: 1, member: 2, anonymous: 3
+}
 
 module.exports = {
   insertOrUpdateUser: user => dao.insertOrUpdateUser(user),
+
+  setUserRole: async (req, res, next) => {
+    if (!req.user) {
+      res.status(401)
+      res.send('unauthorized')
+      return
+    }    
+
+    const myRole = await dao.getUserRole(req.user.id)
+    if (myRole !== ROLES.admin) {
+      req.status(401)
+      req.send('Unauthorized')
+      return
+    }
+
+    const success = await dao.setUserRole(req.body.user_id, req.body.role)
+    res.header('Content-Type', 'application/json')
+    res.end(JSON.stringify({success}));
+  },
+
+  getSelf: async (req, res, next) => {
+    if (!req.user) {
+      res.status(401)
+      res.send('unauthorized')
+      return
+    }    
+
+    const me = await dao.getUser(req.user.id)
+    res.header('Content-Type', 'application/json')
+    res.end(JSON.stringify({user: me}));
+  },
+
+  getUsers: async (req, res, next) => {
+    if (!req.user) {
+      res.status(401)
+      res.send('unauthorized')
+      return
+    }    
+
+    const myRole = await dao.getUserRole(req.user.id)
+    if (myRole !== ROLES.admin) {
+      req.status(401)
+      req.send('Unauthorized')
+      return
+    }
+
+    const users = await dao.getUsers()
+    res.header('Content-Type', 'application/json')
+    res.end(JSON.stringify({users}));
+  },
 
   updateUserProfile: async (req, res, next) => {
     console.log("updateUserProfile")

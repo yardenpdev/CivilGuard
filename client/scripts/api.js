@@ -45,10 +45,15 @@ const queryKnesset = async path => {
 
 
 export async function getSessionItems(sessionIDs) {
-    const reqs = await Promise.all(sessionIDs.map(id =>
-        queryKnesset(`KNS_CmtSessionItem()?$filter=CommitteeSessionID eq ${id}`
-    )))
-    return reqs.flat()
+    let items = []
+    const batchSize = 20
+    for (let i = 0; i < sessionIDs.length; i += batchSize) {
+        const ids = sessionIDs.slice(i, Math.min(i + batchSize, sessionIDs.length))
+        const result = await queryKnesset(`KNS_CmtSessionItem()?$filter=${ids.map(id => `CommitteeSessionID eq ${id}`).join(' or ')}`)
+        items = [...items, ...result] 
+    }
+
+    return items
 }
 
 export async function getCommittees(ids) {
@@ -60,27 +65,35 @@ export function getCommitteeSessions({startDate, endDate}) {
 }
 
 export async function getKnessetData({startDate, endDate}) {
-    const sessions = await getCommitteeSessions({startDate, endDate})
-    const committeeIDs = [...new Set(sessions.map(s => s.CommitteeID))]
-    const committees = (await getCommittees(committeeIDs)).map(c => ({[c.CommitteeID]: c})).reduce((a, o) => Object.assign(a, o), {})
-    const sessionItems = await getSessionItems(sessions.map(s => s.CommitteeSessionID))
+    try {
+        const sessions = await getCommitteeSessions({startDate, endDate})
+        const committeeIDs = [...new Set(sessions.map(s => s.CommitteeID))]
+        const committees = (await getCommittees(committeeIDs)).map(c => ({[c.CommitteeID]: c})).reduce((a, o) => Object.assign(a, o), {})
+        const sessionItems = await getSessionItems(sessions.map(s => s.CommitteeSessionID))
 
-    return sessions.map(session => ({
-        session,
-        committee: committees[session.CommitteeID],
-        items: sessionItems.filter(item => item.CommitteeSessionID === session.CommitteeSessionID)
-    }))
+        return sessions.map(session => ({
+            session,
+            committee: committees[session.CommitteeID],
+            items: sessionItems.filter(item => item.CommitteeSessionID === session.CommitteeSessionID)
+        }))
+    } catch (e) {
+        console.error(e)
+    }
 }
 
 export async function getSessionData(sessionItemID) {
-    const item = await queryKnesset(`KNS_CmtSessionItem(${sessionItemID})?$expand=KNS_CommitteeSession/KNS_Committee`)
-    const session = item.KNS_CommitteeSession
-    const committee = session.KNS_Committee
-    delete session.KNS_Committee
-    delete item.KNS_CommitteeSession
-    const subjects = await getSessionSubjects(item.CmtSessionItemID)
-    const remarks = await getSessionRemarks(item.CmtSessionItemID)
-    return {item, session, committee, subjects, remarks}
+    try {
+        const item = await queryKnesset(`KNS_CmtSessionItem(${sessionItemID})?$expand=KNS_CommitteeSession/KNS_Committee`)
+        const session = item.KNS_CommitteeSession
+        const committee = session.KNS_Committee
+        delete session.KNS_Committee
+        delete item.KNS_CommitteeSession
+        const subjects = await getSessionSubjects(item.CmtSessionItemID)
+        const remarks = await getSessionRemarks(item.CmtSessionItemID)
+        return {item, session, committee, subjects, remarks}
+    } catch (e) {
+        console.error(e)
+    }
 }
 
 export async function addSessionRemark(sessionItemID, remark) {
@@ -114,7 +127,7 @@ export async function getSessionRemarks(sessionItemID) {
 }
 
 export async function getCurrentUser() {
-    const response = await fetch('/me')
+    const response = await fetch('/api/me')
     return (await response.json()).user
 }
 

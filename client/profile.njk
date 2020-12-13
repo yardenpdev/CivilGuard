@@ -1,0 +1,14 @@
+{% extends "./base.njk" %}
+{% block title %}
+פרופיל
+{% endblock %}
+{% block main %}
+<form id="profile">
+    <label>שם: <input type="text" id="name" />
+    <label>תמונה: <input type="text" id="photo" />
+    <img id="thumb" />
+    <label>אימייל: <input type="text" id="email" />
+    <input type="submit" value="אשר" id="submit" />
+</form>
+<script type="module" src="/scripts/profile.js"></script>
+{% endblock %}

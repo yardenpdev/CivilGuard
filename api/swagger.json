@@ -9,6 +9,83 @@
     "host": "localhost:3000",
     "basePath": "/api",
     "paths": {
+        "/me": {
+            "get": {
+                "x-swagger-router-controller": "User",
+                "operationId": "getSelf",
+                "description": "Get user info for currentUser",
+                "responses": {
+                "default": {
+                    "description": "Invalid request.",
+                    "schema": {
+                    "$ref": "#/definitions/Error"
+                    }
+                },
+                "200": {
+                    "description": "user registered successfuly.",
+                    "schema": {
+                    "$ref": "#/definitions/User"
+                    }
+                }
+                }
+            }
+        },
+        "/admin": {
+            "get": {
+                "x-swagger-router-controller": "User",
+                "operationId": "getUsers",
+                "description": "Get list of users",
+                "responses": {
+                "default": {
+                    "description": "Invalid request.",
+                    "schema": {
+                    "$ref": "#/definitions/Error"
+                    }
+                },
+                "200": {
+                    "description": "user registered successfuly.",
+                    "schema": {
+                    "$ref": "#/definitions/Success"
+                    }
+                }
+                }
+            },
+            "put": {
+                "x-swagger-router-controller": "User",
+                "operationId": "setUserRole",
+                "description": "Get list of users",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "formData",
+                        "description": "The user's ID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "role",
+                        "in": "formData",
+                        "description": "The user's role",
+                        "required": true,
+                        "type": "number"
+                    }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "Invalid request.",
+                        "schema": {
+                        "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "200": {
+                        "description": "user registered successfuly.",
+                        "schema": {
+                        "$ref": "#/definitions/Users"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "put": {
                 "x-swagger-router-controller": "User",
@@ -387,7 +464,26 @@
         }
     },
     "definitions": {
-      "Subjects": {
+        "User": {
+            "properties": {
+                "name": { "type": "string"},
+                "email": { "type": "string"},
+                "id": { "type": "string"},
+                "role": {"type": "number"}
+            }
+        },
+        "Users": {
+            "properties": {
+                "users": {
+                    "type": "array",
+                    "items":{
+                        "$ref": "#/definitions/User"
+                    }
+                }
+              },
+              "required": ["users"]
+          },
+        "Subjects": {
         "properties": {
             "subjects": {
                 "type": "array",
