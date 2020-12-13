@@ -27,12 +27,12 @@ passport.use(new OAuth2Strategy({
       const email = profile.emails[0]
       const photo = profile.photos[0]
       let user = {id: user_id, name: profile.displayName, photo: photo ? photo.value : '', email: email ? email.value : ''}
-      console.log(user)
       try {
         user = User.insertOrUpdateUser(user)
       } catch (e) {
         done(e)
       } finally {
+        console.log(user)
         done(null, user)
       }
   }

@@ -73,6 +73,7 @@ class DAO {
         var date_added = new Date();
 
         const response = await query('SELECT * FROM users WHERE user_id=$1', [id])
+        console.log(response)
         if (response.rowCount === 1) {
             const [{name, photo, email}] = response.rows
             return {id, name, photo, email}
