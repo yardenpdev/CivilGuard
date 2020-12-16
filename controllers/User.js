@@ -83,8 +83,7 @@ module.exports = {
 
     // get parametars 
     var user_id = req.user.id;
-    var subjects = req.body.subjects;
-    const success = await dao.addSubjectsToUser(user_id, subjects);
+    const success = await dao.setSubjectsToUser(user_id, JSON.parse(req.body.subjects));
     res.header('Content-Type', 'application/json')
     res.end(JSON.stringify({success}));
   },

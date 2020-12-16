@@ -136,7 +136,7 @@ class DAO {
     async getSessionsBySubject(subjects) {
         console.log('DAO - getSessionsOfSubjects')
         const response = await query('SELECT session from session_subject where subject = ANY($1)', [subjects])
-        return response.rows
+        return response.rows.map(({session}) => session)
     }
 
     async updateUserProfile(id, info) {

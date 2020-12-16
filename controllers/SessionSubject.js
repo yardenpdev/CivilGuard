@@ -13,6 +13,13 @@ module.exports = {
         res.header('Content-Type', 'application/json')
         res.end(JSON.stringify({subjects}))
     },
+    getSessionsBySubject: async(req, res, next) => {
+        const subjects = req.query.subjects.split(',')
+        console.log(`get sessions for ${subjects}`)
+        const sessions = await dao.getSessionsBySubject(subjects)
+        res.header('Content-Type', 'application/json')
+        res.end(JSON.stringify({sessions}))
+    },
 
     addSessionSubject: async (req, res, next) => {
         if (!req.user) {

@@ -1,6 +1,7 @@
 import * as api from './api.js'
 window.addEventListener('DOMContentLoaded', async () => {
     const me = await api.ensureCurrentUser()
+    const userSubjects = await api.getUserSubjects()
     const mainForm = document.querySelector('#main')
     const table = mainForm.querySelector('table > tbody')
     const issueTemplate = mainForm.querySelector('tbody tr')

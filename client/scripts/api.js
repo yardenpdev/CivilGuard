@@ -19,14 +19,14 @@ export async function getSubjects() {
 export async function addSubject(title) {
     const body = new FormData()
     body.append('subject', title);
-    return await fetch('/api/subjects', {method: 'POST', body})
+    return fetch('/api/subjects', {method: 'POST', body})
 }
 
-export async function deleteSubject(title) {
+export function deleteSubject(title) {
     const body = new FormData()
     body.append('subject', title);
 
-    return await fetch('/api/subjects', {method: 'DELETE', body})
+    return fetch('/api/subjects', {method: 'DELETE', body})
 
 }
 
@@ -43,6 +43,15 @@ const queryKnesset = async path => {
     return [...data.value, ...(nextLink ? await queryKnesset(nextLink) : [])]
 }
 
+export async function getUserSubjects() {
+    return (await (await fetch('/api/user_subjects')).json()).subjects
+}
+
+export function setUserSubjects(subjects) {
+    const body = new FormData()
+    body.append('subjects', JSON.stringify(subjects))
+    return fetch('/api/user_subjects', {method: 'POST', body})
+}
 
 export async function getSessionItems(sessionIDs) {
     let items = []
@@ -137,4 +146,36 @@ export async function ensureCurrentUser() {
         return self
 
     location.href = `/auth/google?next=${location.href}`
+}
+
+export async function getSessionsForUser() {
+    const userSubjects = await getUserSubjects()
+    const {sessions} = await (await fetch(`/api/sessions?subjects=${userSubjects.join(',')}`)).json()
+    return Promise.all(sessions.map(getSessionData))
+}
+
+export async function checkNotifications() {
+    const prevSessions = JSON.parse(localStorage.getItem('prevSessions') || '[]')
+    const sessions = await getSessionsForUser()
+//    localStorage.setItem('prevSessions', JSON.stringify(sessions))
+    const newSessions = sessions.filter(s => !prevSessions.some(({item: {CmtSessionItemID}}) => CmtSessionItemID === s.item.CmtSessionItemID))
+    if (!newSessions.length)
+        return
+
+    newSessions.forEach(async s => {
+        const ntf = new Notification(`דיון חדש ב${s.committee.Name}`, {message: s.item.Name})
+
+        ntf.onclick = () => {
+            location.href = `/remarks?item=${s.item.CmtSessionItemID}`
+            ntf.close()
+        }
+    })      
+}
+
+export async function initPermissions() {
+    const notificationPermission = await Notification.requestPermission()
+    if (notificationPermission !== 'granted')
+        return
+
+    checkNotifications()
 }

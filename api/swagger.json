@@ -360,6 +360,39 @@
                 }
             }
         },
+        "/sessions": {
+            "get": {
+                "x-swagger-router-controller": "SessionSubject",
+                "operationId": "getSessionsBySubject",
+                "description": "get sessions by a particular subject",
+                "parameters": [
+                {
+                    "name": "subjects",
+                    "in": "query",
+                    "description": "retrieve sessions by subjects",
+                    "required": true,
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "Invalid request.",
+                        "schema": {
+                        "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "200": {
+                        "description": "sessions list.",
+                        "schema": {
+                        "$ref": "#/definitions/Sessions"
+                        }
+                    }
+                }
+            }
+        },
         "/session_subjects": {
             "get": {
                 "x-swagger-router-controller": "SessionSubject",
@@ -382,7 +415,7 @@
                         }
                     },
                     "200": {
-                        "description": "sessions list.",
+                        "description": "subject list",
                         "schema": {
                         "$ref": "#/definitions/Subjects"
                         }
