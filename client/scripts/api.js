@@ -163,7 +163,7 @@ export async function checkNotifications() {
         return
 
     newSessions.forEach(async s => {
-        const ntf = new Notification(`דיון חדש ב${s.committee.Name}`, {message: s.item.Name})
+        const ntf = new Notification(`דיון חדש ב${s.committee.Name}`, {body: s.item.Name, icon:'https://cdn2.iconfinder.com/data/icons/mixed-rounded-flat-icon/512/megaphone-64.png'})
 
         ntf.onclick = () => {
             location.href = `/remarks?item=${s.item.CmtSessionItemID}`

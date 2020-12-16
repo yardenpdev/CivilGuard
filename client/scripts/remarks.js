@@ -26,8 +26,10 @@ window.addEventListener('DOMContentLoaded', async () => {
                 await api.deleteRemark(item.CmtSessionItemID, r.text)
                 render()
             }
-            if (r.user_id !== me.id)
-                deleteButton.setAttribute('hidden', true)
+
+            debugger
+            if (r.user_id !== me.user_id)
+                deleteButton.setAttribute('hidden', r.user_id !== me.user_id)
 
             remarkList.appendChild(li)
         })

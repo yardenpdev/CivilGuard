@@ -3,17 +3,20 @@
     <head>
         <link rel="stylesheet" href="/styles/style.css" />
         <title>המשמר החברתי - {% block title %}{% endblock %}</title>
+        <link rel="icon" href="/images/mishmar-32x32.png" sizes="32x32">
+        <link href="http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold" rel="stylesheet" type="text/css">
     </head>
     <body  >
         <header>
-        <h1><a href="/">המשמר החברתי</a></h1>
-        <h3>שלום <span id="name"></span></h3>
+        <h1><a href="/"><img alt="המשמר החברתי" src="/images/mishmar-250x250.png" id="icon" /></a>
+        שלום <span id="name"></span></h1>
         <nav>
             <a href="/categorize/">חיבור נושאים לישיבות</a>
             <a href="/main/">הוספת הערות לישיבות</a>
             <a href="/profile/">הפרופיל שלי</a>
             <a href="/logout/">יציאה</a>
         </nav>
+        <img src="/images/mishmar.jpg" />
         </header>
         <main>
             {% block main%}{% endblock %}

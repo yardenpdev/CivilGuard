@@ -6,4 +6,5 @@ module.exports = function(eleventyConfig) {
   ]);
 eleventyConfig.addPassthroughCopy("client/scripts");
 eleventyConfig.addPassthroughCopy("client/styles");
+eleventyConfig.addPassthroughCopy("client/images");
 };

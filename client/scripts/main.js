@@ -87,8 +87,6 @@ window.addEventListener('DOMContentLoaded', async () => {
                 element.querySelector('.committee').innerText = committee.Name
                 element.querySelector('.date').innerText = new Date(session.StartDate).toLocaleString('he-IL')
                 element.querySelector('.issue').innerText = item.Name
-                if (session.SessionUrl)
-                    element.querySelector('.issue').href = session.SessionUrl
                 const innerSubjTemplate = element.querySelector('span.subject')
                 const subjectArea = element.querySelector('.subjects') 
                 innerSubjTemplate.remove()
