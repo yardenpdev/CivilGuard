@@ -87,8 +87,7 @@ class DAO {
 
     async addSessionSubjectRelation(session, subject) {
         console.log('DAO - addSessionSubjectRelation');
-        const res = await client
-                            .query('INSERT INTO session_subject(session, subject) VALUES($1, $2)',
+        const res = await query('INSERT INTO session_subject(session, subject) VALUES($1, $2)',
                             [session, subject])
         return res.rowCount === 1
     }
