@@ -80,7 +80,7 @@ app.get('/knesset/:query*', async (req, res, next) => {
     const response = await fetch(url, {headers: {'Accept': 'application/json'}})
     const contentType = response.headers.get('content-type')
     if (!contentType.startsWith('application/json')) {
-      res.status(500).send({error: 'Knesset Service Error'})
+      res.status(500).send({error: 'Knesset Service Error', body: await response.text()})
       return
     }
 
