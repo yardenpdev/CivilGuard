@@ -29,6 +29,19 @@ export function deleteSubject(title) {
     return fetch('/api/subjects', {method: 'DELETE', body})
 
 }
+const getValue = (o, k) => (v => (v.$ && v.$['m:null']) ? null : v._ ? v._ : v)(o[`d:${k}`][0])
+const extractEntry = e => {
+    const props = (e.content[0]['m:properties'][0])
+    const result = Object.entries(props).map(([k, [v]]) => 
+        ({[k.substr(2)]: v._ || v})).reduce((a, o) => Object.assign(a, o), {})
+    e.link.forEach(l => {
+        const inline = l['m:inline']
+        if (inline)
+            result[l.$.title] = extractEntry(inline[0].entry[0])
+    })
+
+    return result
+}
 
 const queryKnesset = async path => {
     const url = `/knesset/${path}`
@@ -38,9 +51,8 @@ const queryKnesset = async path => {
     if (error)
         throw error
     const nextLink = data['odata.nextLink']
-    if (!data.value)
-        return data
-    return [...data.value, ...(nextLink ? await queryKnesset(nextLink) : [])]
+    const value = data.feed ? data.feed.entry.map(extractEntry) : extractEntry(data.entry)
+    return data.feed ? [...value, ...(nextLink ? await queryKnesset(nextLink) : [])] : value
 }
 
 export async function getUserSubjects() {
@@ -66,11 +78,11 @@ export async function getSessionItems(sessionIDs) {
 }
 
 export async function getCommittees(ids) {
-    return queryKnesset(`KNS_Committee()?$filter=${ids.map(id => `CommitteeID eq ${id}`).join(' or ')}`)    
+    return queryKnesset(`KNS_Committee()?$filter=${ids.map(id => `CommitteeID eq ${id}`).join(' or ')}`)  
 }
 
 export function getCommitteeSessions({startDate, endDate}) {
-   return queryKnesset(`KNS_CommitteeSession()?$filter=StartDate ge DateTime'${startDate.toISOString()}' and StartDate lt DateTime'${endDate.toISOString()}'`)
+   return queryKnesset(`KNS_CommitteeSession()?$filter=StatusDesc eq 'פעילה' and StartDate ge DateTime'${startDate.toISOString()}' and StartDate lt DateTime'${endDate.toISOString()}'`)
 }
 
 export async function getKnessetData({startDate, endDate}) {
