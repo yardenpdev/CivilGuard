@@ -2,7 +2,7 @@ export async function toggleSubject(item, subject, enabled) {
     const body = new FormData()
     body.append('session_id', item);
     body.append('subject', subject);
-    return await fetch('/api/session_subjects', {method: 'POST', body})
+    return await fetch('/api/session_subjects', {method: enabled ? 'POST' : 'DELETE', body})
 }
 
 export async function getSessionSubjects(item) {
@@ -70,7 +70,7 @@ export async function getCommittees(ids) {
 }
 
 export function getCommitteeSessions({startDate, endDate}) {
-   return queryKnesset(`KNS_CommitteeSession()?$filter=StartDate ge DateTime'${startDate.toISOString()}' and StartDate lt DateTime'${endDate.toISOString()}'`)
+   return queryKnesset(`KNS_CommitteeSession()?$filter=StatusDesc eq 'פעילה' and StartDate ge DateTime'${startDate.toISOString()}' and StartDate lt DateTime'${endDate.toISOString()}'`)
 }
 
 export async function getKnessetData({startDate, endDate}) {

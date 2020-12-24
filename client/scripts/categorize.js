@@ -54,17 +54,44 @@ window.addEventListener('DOMContentLoaded', async () => {
                 element.querySelector('.issue').innerText = item.Name
                 if (session.SessionUrl)
                     element.querySelector('.issue').href = session.SessionUrl
-                const checkboxTemplate = element.querySelector('span.subject')
+                const itemSubjectTemplate = element.querySelector('span.subject')
                 const subjectArea = element.querySelector('.subjects') 
-                checkboxTemplate.remove()
-                for (const subject of subjects) {
-                    const span = checkboxTemplate.cloneNode(true)
-                    const checkbox = span.querySelector('input')
-                    const label = span.querySelector('label span')            
+                itemSubjectTemplate.remove()
+                const addSubjectInput = subjectArea.querySelector('.add')
+                const addUnselected =subject => {
+                    const o = document.createElement('option')
+                    o.value = o.innerText = subject
+                    addSubjectInput.appendChild(o)
+                }
+
+                const addSelected = subject => {
+                    const span = itemSubjectTemplate.cloneNode(true)
+                    const del = span.querySelector('.del')
+                    const label = span.querySelector('.title')            
                     label.innerText = subject
-                    checkbox.checked = itemSubjects.includes(subject)
-                    checkbox.onchange = () => api.toggleSubject(item.CmtSessionItemID, subject, checkbox.checked)
+                    del.onclick = async () => {
+                        await api.toggleSubject(item.CmtSessionItemID, subject, false)
+                        span.remove()
+                        addUnselected(subject)
+                    }
                     subjectArea.appendChild(span)
+                }
+                addSubjectInput.onchange = event => {
+                    debugger
+                    const index = addSubjectInput.selectedIndex
+                    if (!index)
+                        return
+                    const subject = addSubjectInput.value
+                    addSelected(subject)
+                    addSubjectInput.options[index].remove()
+                    api.toggleSubject(item.CmtSessionItemID, subject, true)
+                }
+
+                for (const subject of subjects) {
+                    if (itemSubjects.includes(subject))
+                        addSelected(subject)
+                    else
+                        addUnselected(subject)
                 }
 
                 table.appendChild(element)

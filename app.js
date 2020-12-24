@@ -77,10 +77,7 @@ app.get('/knesset/:query*', async (req, res, next) => {
   const {query} = req.params
   try {
     const url = `http://knesset.gov.il/Odata/ParliamentInfo.svc/${query}?${Object.keys(req.query).map(k => `${k}=${encodeURIComponent(req.query[k])}`)}`
-    console.log(req.headers)
-    const headers = {'Accept': 'application/json;odata=verbose',
-      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'}
-    console.log({headers, url})
+    const headers = {Accept: 'application/json'}
     const response = await fetch(url, {headers})
     const contentType = response.headers.get('content-type')
     if (!contentType.startsWith('application/json')) {

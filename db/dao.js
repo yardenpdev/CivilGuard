@@ -94,8 +94,7 @@ class DAO {
 
     async removeSessionSubjectRelation(session, subject) {
         console.log('DAO - removeSessionSubjectRelation');
-        const res = await client
-            .query('DELETE FROM session_subject WHERE session=$1 AND subject=$2',
+        const res = await query('DELETE FROM session_subject WHERE session=$1 AND subject=$2',
                  [session, subject])
         return res.rowCount === 1
     }
@@ -125,8 +124,7 @@ class DAO {
         if (response.rowCount !== 1)
             return false
 
-        response2 = await client
-            .query('DELETE FROM session_subject WHERE subject=$1',
+        response2 = await query('DELETE FROM session_subject WHERE subject=$1',
                  [subject])
 
         return true

@@ -460,7 +460,7 @@
             },
             "delete": {
                 "x-swagger-router-controller": "SessionSubject",
-                "operationId": "deleteSessionSubject",
+                "operationId": "removeSessionSubject",
                 "description": "remove session and subject connection",
                 "parameters": [
                 {

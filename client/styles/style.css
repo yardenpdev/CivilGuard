@@ -89,6 +89,19 @@ body {
     transition: opacity 300ms ease-in;
 }
 
+#categorize #subjectList, #notifications #subjects {
+    display: flex;
+    flex-direction: column;
+}
+
+#categorize #subjectList li {
+    display: flex;
+}
+
+#categorize #subjectList label {
+    width: 180px;
+}
+
 #loading {
     transition: opacity 100ms ease-in;
 }
@@ -135,10 +148,9 @@ td.actions a {
     font-weight: bold;
 }
 
-#subjectList {
-    display: flex;
+#main #subjectList {
+    column-count: 3;
 }
-
 a#info, input[type="submit"] {
     background: orange;
     font-weight: bold;
