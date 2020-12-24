@@ -10,7 +10,6 @@ const {OAuth2Strategy} = require('passport-google-oauth');
 const cookieSession = require('cookie-session');
 const swaggerDoc = require('./api/swagger.json');
 const User = require('./controllers/User')
-const {parseString} = require('xml2js')
 
 const PORT = process.env.PORT || 3000
 const HOST = process.env.HOST || `http://localhost:${PORT}`
@@ -78,16 +77,18 @@ app.get('/knesset/:query*', async (req, res, next) => {
   const {query} = req.params
   try {
     const url = `http://knesset.gov.il/Odata/ParliamentInfo.svc/${query}?${Object.keys(req.query).map(k => `${k}=${encodeURIComponent(req.query[k])}`)}`
-    const response = await fetch(url)
-    const xml = await response.text() 
-      console.log(xml)
-    parseString(xml, (err, json) => {
-      console.log(err)
-      if (err)
-        res.status(500).send(err)
-      else
-        res.status(200).send(json)
-    })
+    console.log(req.headers)
+    const headers = {'Accept': 'application/json;odata=verbose',
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'}
+    console.log({headers, url})
+    const response = await fetch(url, {headers})
+    const contentType = response.headers.get('content-type')
+    if (!contentType.startsWith('application/json')) {
+      res.status(500).send({error: 'Knesset Service Error', body: await response.text()})
+      return
+    }
+
+    res.send(await response.text())
   } catch (e) {
     res.status(500).send(e.message)
   }
