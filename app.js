@@ -79,13 +79,13 @@ app.get('/knesset/:query*', async (req, res, next) => {
   try {
     const url = `http://knesset.gov.il/Odata/ParliamentInfo.svc/${query}?${Object.keys(req.query).map(k => `${k}=${encodeURIComponent(req.query[k])}`)}`
     const response = await fetch(url)
-    parseString(await response.text(), (err, json) => {
+    const xml = await response.text() 
+    parseString(xml, (err, json) => {
       if (err)
         res.status(500).send(err)
       else
         res.status(200).send(json)
     })
-    res.send(json)
   } catch (e) {
     res.status(500).send(e.message)
   }
