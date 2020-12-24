@@ -77,7 +77,10 @@ app.get('/knesset/:query*', async (req, res, next) => {
   const {query} = req.params
   try {
     const url = `http://knesset.gov.il/Odata/ParliamentInfo.svc/${query}?${Object.keys(req.query).map(k => `${k}=${encodeURIComponent(req.query[k])}`)}`
-    const response = await fetch(url, {headers: {'Accept': 'application/json;odata=verbose'}})
+    const headers = {'Accept': 'application/json;odata=verbose',
+      'User-Agent': req.headers['User-Agent']}
+    console.log({headers, url})
+    const response = await fetch(url, {headers})
     const contentType = response.headers.get('content-type')
     if (!contentType.startsWith('application/json')) {
       res.status(500).send({error: 'Knesset Service Error', body: await response.text()})
